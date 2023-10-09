@@ -8,7 +8,7 @@ PORT = 40808
 
 # class PictureWindow(QMainWindow):
 #     def __init__(self):
-#         super().__init__(parent, flags)
+#         super().__init__()
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
     client.connect((HOST, PORT))
