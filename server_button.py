@@ -3,6 +3,7 @@ import socket
 
 HOST = socket.gethostname() 
 PORT = 40808
+number = 0
 
 class ButtonWindow(QMainWindow):
     def __init__(self):
@@ -13,8 +14,10 @@ class ButtonWindow(QMainWindow):
         button.clicked.connect(self.ButtonClick)
         self.setCentralWidget(button)
     def ButtonClick(self):
-        picture = b'image'
-        connection.sendall(picture)
+        number += 1
+        file = open('server_pictures/' +number + '.jpg', 'rb')
+        picture = file.read(1024)
+        connection.send(picture) 
             
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
@@ -25,8 +28,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
         print(f'Connected by {address}')
         while True:
             data = connection.recv(1024)
-            connection.sendall(data)
             print(f'Recieved: {data.decode()}')
+            connection.sendall(data)
             app = QApplication([])
             window = ButtonWindow()
             window.show()
