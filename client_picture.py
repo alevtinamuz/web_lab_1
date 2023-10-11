@@ -1,4 +1,5 @@
 import socket
+from PyQt6.QtMultimedia import QSoundEffect
 from PyQt6.QtWidgets import (
     QMainWindow, QApplication,
     QLabel, QPushButton, QWidget, QVBoxLayout
@@ -39,10 +40,14 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.centralWidget)
         self.setWindowTitle('Picture')
         
+        self.effect_like = QSoundEffect()
+        self.effect_like.setSource(QtCore.QUrl.fromLocalFile('bin/like_sound.wav'))
+        self.effect_dislike = QSoundEffect()
+        self.effect_dislike.setSource(QtCore.QUrl.fromLocalFile('bin/dislike_sound.wav'))
         self.like = QPushButton('Like!👍')
         self.dislike = QPushButton('Dislike!👎')
-        self.like.clicked.connect(self.message_like)
-        self.dislike.clicked.connect(self.message_dislike)
+        self.like.clicked.connect(self.effect_like.play)
+        self.dislike.clicked.connect(self.effect_dislike.play)
         self.like.setFixedSize(500, 60)
         self.dislike.setFixedSize(500, 60)
         
@@ -58,9 +63,6 @@ class MainWindow(QMainWindow):
         self.socket_thread = SocketThread()
         self.socket_thread.data_received.connect(self.update_pictures)
         self.socket_thread.start()
-    
-    def message_like(self):
-        message = b'Client liked this picture.'
         
 
     def message_dislike(self):
