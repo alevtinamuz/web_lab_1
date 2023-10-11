@@ -1,4 +1,5 @@
 import socket
+
 from PyQt6.QtMultimedia import QSoundEffect
 from PyQt6.QtWidgets import (
     QMainWindow, QApplication,
@@ -6,7 +7,20 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6 import QtGui, QtCore
 
-HOST = socket.gethostname()
+
+def local_ipv4():
+    st = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        st.connect(('10.255.255.255', 1))
+        ip_l = st.getsockname()[0]
+    except Exception:
+        ip_l = '127.0.0.1'
+    finally:
+        st.close()
+    return ip_l
+print(local_ipv4())
+
+HOST = local_ipv4()
 PORT = 40808
 number = 0
 tmp = 0
