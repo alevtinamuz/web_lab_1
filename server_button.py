@@ -14,9 +14,6 @@ class ButtonWindow(QMainWindow):
         button.clicked.connect(self.ButtonClick)
         self.setCentralWidget(button)
     def ButtonClick(self):
-        global number
-        if number == 11:
-            number =  0
         number += 1
         picture = open('server_pictures/' + str(number) + '.jpg', 'rb')
         picture_bytes = picture.read()
@@ -31,8 +28,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
     print(f'Connected by {address}')
     with connection:
         while True:
-            data = connection.recv(10000000000)
-            print(f'Recieved: {data.decode}')
+            data = connection.recv(1024)
+            print(f'Recieved: {data.decode()}')
+            connection.sendall(data)
             app = QApplication([])
             window = ButtonWindow()
             window.show()
